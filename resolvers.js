@@ -40,4 +40,11 @@ module.exports = {
         );
         return rows[0];
     },
+    updateRecipe: async ({ id, name, time, description }) => {
+        const { rows } = await pool.query(
+            "UPDATE recipes SET name = COALESCE($2, name), time = COALESCE($3, time), description = COALESCE($4, description) WHERE id = $1 RETURNING *",
+            [id, name, time, description]
+        );
+        return rows[0];
+    }
 };

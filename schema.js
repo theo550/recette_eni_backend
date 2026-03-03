@@ -16,5 +16,6 @@ module.exports = buildSchema(`
   type Mutation {
     createRecipe(name: String!, time: Int!, description: String!): Recipe
     deleteRecipe(id: ID!): Boolean
+    updateRecipe(id: ID!, name: String, time: Int, description: String): Recipe
   }
 `);
