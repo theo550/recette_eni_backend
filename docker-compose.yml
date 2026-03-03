@@ -1,0 +1,15 @@
+services:
+  postgres:
+    image: postgres:16
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${process.env.DB_USER}
+      POSTGRES_PASSWORD: ${process.env.DB_PASSWORD}
+      POSTGRES_DB: ${process.env.DB_NAME}
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+volumes:
+  pgdata:
