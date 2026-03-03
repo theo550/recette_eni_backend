@@ -19,17 +19,29 @@ pool.query(`
 `);
 
 module.exports = {
-    recipes: async () => {
-        const { rows } = await pool.query("SELECT * FROM recipes");
+    recipes: async ({ search, category }) => {
+        let query = "SELECT * FROM recipes WHERE 1=1";
+        const params = [];
+
+        if (search) {
+            params.push(`%${search}%`);
+            query += ` AND name ILIKE $${params.length}`;
+        }
+        if (category) {
+            params.push(`%${category}%`);
+            query += ` AND category ILIKE $${params.length}`;
+        }
+
+        const { rows } = await pool.query(query, params);
         return rows;
     },
     recipe: async ({ id }) => {
         const { rows } = await pool.query("SELECT * FROM recipes WHERE id = $1", [id]);
         return rows[0];
     },
-    createRecipe: async ({ name, time, description }) => {
+    createRecipe: async ({ name, time, description, category }) => {
         const { rows } = await pool.query(
-            "INSERT INTO recipes (name, time, description) VALUES ($1, $2, $3) RETURNING *",
+            "INSERT INTO recipes (name, time, description, category) VALUES ($1, $2, $3, $4) RETURNING *",
             [name, time, description]
         );
         return rows[0];
@@ -40,9 +52,9 @@ module.exports = {
         );
         return rows[0];
     },
-    updateRecipe: async ({ id, name, time, description }) => {
+    updateRecipe: async ({ id, name, time, description, category }) => {
         const { rows } = await pool.query(
-            "UPDATE recipes SET name = COALESCE($2, name), time = COALESCE($3, time), description = COALESCE($4, description) WHERE id = $1 RETURNING *",
+            "UPDATE recipes SET name = COALESCE($2, name), time = COALESCE($3, time), description = COALESCE($4, description), category = COALESCE($5, category) WHERE id = $1 RETURNING *",
             [id, name, time, description]
         );
         return rows[0];

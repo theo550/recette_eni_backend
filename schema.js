@@ -6,16 +6,17 @@ module.exports = buildSchema(`
     name: String!
     time: Int!
     description: String!
+    category: String
   }
 
   type Query {
-    recipes: [Recipe]
+    recipes(search: String, category: String): [Recipe]
     recipe(id: ID!): Recipe
   }
 
   type Mutation {
-    createRecipe(name: String!, time: Int!, description: String!): Recipe
+    createRecipe(name: String!, time: Int!, description: String!, category: String): Recipe
     deleteRecipe(id: ID!): Boolean
-    updateRecipe(id: ID!, name: String, time: Int, description: String): Recipe
+    updateRecipe(id: ID!, name: String, time: Int, description: String, category: String): Recipe
   }
 `);
