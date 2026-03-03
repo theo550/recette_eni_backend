@@ -34,4 +34,10 @@ module.exports = {
         );
         return rows[0];
     },
+    deleteRecipe: async ({ id }) => {
+        const { rows } = await pool.query(
+            "DELETE FROM recipes WHERE id = $1", [id]
+        );
+        return rows[0];
+    },
 };
