@@ -1,6 +1,9 @@
-const { buildSchema } = require("graphql");
+// schema.js
+const { makeExecutableSchema } = require('@graphql-tools/schema');
 
-module.exports = buildSchema(`
+const typeDefs = `
+  directive @hasRole(role: String!) on FIELD_DEFINITION
+
   type Recipe {
     id: ID!
     name: String!
@@ -11,12 +14,14 @@ module.exports = buildSchema(`
 
   type Query {
     recipes(search: String, category: String): [Recipe]
-    recipe(id: ID!): Recipe
+    recipe(id: ID!): Recipe @hasRole(role: "USER")
   }
 
   type Mutation {
-    createRecipe(name: String!, time: Int!, description: String!, category: String): Recipe
+    createRecipe(name: String!, time: Int!, description: String!, category: String): Recipe @hasRole(role: "USER")
     deleteRecipe(id: ID!): Boolean
     updateRecipe(id: ID!, name: String, time: Int, description: String, category: String): Recipe
   }
-`);
+`;
+
+module.exports = { typeDefs };

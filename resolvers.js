@@ -42,7 +42,7 @@ module.exports = {
     createRecipe: async ({ name, time, description, category }) => {
         const { rows } = await pool.query(
             "INSERT INTO recipes (name, time, description, category) VALUES ($1, $2, $3, $4) RETURNING *",
-            [name, time, description]
+            [name, time, description, category]
         );
         return rows[0];
     },
