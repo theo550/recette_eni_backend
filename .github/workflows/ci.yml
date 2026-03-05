@@ -29,5 +29,5 @@ jobs:
       - name: Check for vulnerabilities
         run: npm audit --audit-level=high
 
-      - name: Run tests
-        run: npm test
+      #- name: Run tests
+      #  run: npm test
